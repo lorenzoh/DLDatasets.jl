@@ -28,9 +28,6 @@ Base.filter(f, ds::FileDataset) = FileDataset(filter(f, ds.tree; dirs = false), 
 
 ## File utilities
 
-# nfiles
-nfiles(tree::FileTree) = length(nodes(tree; dirs = false))
-
 # isimagefile
 isimagefile(file::File) = isimagefile(file.name)
 isimagefile(file::String) = occursin(IMAGEFILE_REGEX, lowercase(file))
