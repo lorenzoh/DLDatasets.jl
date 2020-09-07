@@ -3,6 +3,7 @@
 struct FileDataset
     tree::FileTree
     loadfn
+    nodes
 end
 
 Base.show(io::IO, ds::FileDataset) = print(io, "FileDataset with $(nobs(ds)) files")
@@ -12,19 +13,15 @@ function FileDataset(folder::String, loadfn; filterfn = nothing)
     if !isnothing(filter)
         tree = filter(filterfn, tree; dirs = false)
     end
-    return FileDataset(tree, loadfn)
+    return FileDataset(tree, loadfn, nodes(tree, dirs = false))
 end
 
 FileDataset(loadfn, folder::String; filterfn = nothing) =
     FileDataset(folder, loadfn; filterfn = filterfn)
 
 
-LearnBase.nobs(ds::FileDataset) = nfiles(ds.tree)
-
-function LearnBase.getobs(ds::FileDataset, idx::Int)
-    file = nodes(ds.tree; dirs = false)[idx]
-    return loadobs(ds.loadfn, file)
-end
+LearnBase.nobs(ds::FileDataset) = length(ds.nodes)
+LearnBase.getobs(ds::FileDataset, idx::Int) = loadobs(ds.loadfn, ds.nodes[idx])
 
 
 Base.filter(f, ds::FileDataset) = FileDataset(filter(f, ds.tree; dirs = false), ds.loadfn)
