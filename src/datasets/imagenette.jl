@@ -7,8 +7,37 @@ using FileIO: load
 abstract type ImageNette end
 
 
+const FOLDERTOLABEL = Dict(
+    "n01440764" => "tench",
+    "n02102040" => "English springer",
+    "n02979186" => "cassette player",
+    "n03000684" => "chain saw",
+    "n03028079" => "church",
+    "n03394916" => "French horn",
+    "n03417042" => "garbage truck",
+    "n03425413" => "gas pump",
+    "n03445777" => "golf ball",
+    "n03888257" => "parachute"
+)
+
+const LABELS = [
+    "tench",
+    "English springer",
+    "cassette player",
+    "chain saw",
+    "church",
+    "French horn",
+    "garbage truck",
+    "gas pump",
+    "golf ball",
+    "parachute"
+]
+
+const LABELTOCLASS = Dict(label => i for (i, label) in enumerate(LABELS))
+
+
 function loadimagenette(folder::String, splits)
-    dataset = FileDataset(folder, (loadfile, file -> file.parent.name), filterfn = isimagefile)
+    dataset = FileDataset(folder, (loadfile, file -> FOLDERTOLABEL[file.parent.name]), filterfn = isimagefile)
     return splitdata(dataset, splits) do file
         file.parent.parent.name
     end
@@ -19,6 +48,8 @@ end
 DLDatasets.metadata(::Type{ImageNette}) = (
     obstypes = ("image", "category"),
     splits = ("train", "val"),
+    labels = LABELS,
+    labeltoclass = LABELTOCLASS,
 )
 
 function __init__()

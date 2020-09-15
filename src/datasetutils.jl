@@ -6,7 +6,7 @@ loadobs(f, obs) = f(obs)
 
 
 function splitdata(splitfn, data, split)
-    return filter(x -> splitfn(x) == split, (data))
+    return filter(x -> splitfn(x) == split, data)
 end
 
 function splitdata(splitfn, dataset, splits::Tuple)

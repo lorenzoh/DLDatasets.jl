@@ -24,7 +24,11 @@ LearnBase.nobs(ds::FileDataset) = length(ds.nodes)
 LearnBase.getobs(ds::FileDataset, idx::Int) = loadobs(ds.loadfn, ds.nodes[idx])
 
 
-Base.filter(f, ds::FileDataset) = FileDataset(filter(f, ds.tree; dirs = false), ds.loadfn)
+function Base.filter(f, ds::FileDataset)
+    ftree = filter(f, ds.tree; dirs = false)
+    return FileDataset(ftree, ds.loadfn, nodes(ftree; dirs = false))
+end
+
 
 ## File utilities
 
