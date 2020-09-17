@@ -32,6 +32,7 @@ export
     # Dataset transformations
     splitdata,
     zipdata,
+    catdata,
 
     # File dataset
     FileDataset,
@@ -50,6 +51,7 @@ export
     # Dataset implementations
     ImageNette,
     ImageWoof,
+    MPII,
 
     # reexport
     getobs,

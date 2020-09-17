@@ -14,3 +14,22 @@ function splitdata(splitfn, dataset, splits::Tuple)
 end
 
 splitdata(splitfn, dataset, splits::Nothing) = dataset
+
+
+catdata(datas...) = CatData(datas)
+
+struct CatData
+    datas::Tuple
+end
+
+LearnBase.nobs(data::CatData) = sum(nobs.(data.datas))
+function LearnBase.getobs(data::CatData, idx)
+    ns = nobs.(data.dates)
+    for (i, n) in enumerate(ns)
+        if idx <= n
+            return getobs(data.datas[i], idx)
+        else
+            idx -= n
+        end
+    end
+end
