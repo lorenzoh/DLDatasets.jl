@@ -8,7 +8,6 @@ using Parameters
 
 
 
-function zipdata(datas...) end
 
 
 # Dataset API

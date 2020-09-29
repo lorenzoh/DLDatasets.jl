@@ -10,7 +10,7 @@ Base.show(io::IO, ds::FileDataset) = print(io, "FileDataset with $(nobs(ds)) fil
 
 function FileDataset(folder::String, loadfn; filterfn = nothing)
     tree = FileTree(folder)
-    if !isnothing(filter)
+    if !isnothing(filterfn)
         tree = filter(filterfn, tree; dirs = false)
     end
     return FileDataset(tree, loadfn, nodes(tree, dirs = false))
