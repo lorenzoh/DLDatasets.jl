@@ -24,6 +24,8 @@ include("datasets/imagenette.jl")
 using .ImageNetteData
 include("datasets/imagewoof.jl")
 using .ImageWoofData
+include("datasets/coco.jl")
+using .COCOData
 include("datasets/mpii.jl")
 using .MPIIData
 

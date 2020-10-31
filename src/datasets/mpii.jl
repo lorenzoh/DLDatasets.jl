@@ -98,6 +98,7 @@ struct ByAnnotation <: By end
 
 
 function loadmpii(by::Type{<:By}, imagefolder, annotationfolder, splits)
+    # TODO: filter on `splits`
     trainfile = joinpath(annotationfolder, "mpiitrain.json")
     valfile = joinpath(annotationfolder, "mpiivalid.json")
 
@@ -138,6 +139,7 @@ function LearnBase.getobs(ds::MPII{ByImage}, idx)
     )
 end
 
+LearnBase.nobs(ds::MPII{<:ByAnnotation}) = length(ds.annots)
 function LearnBase.getobs(ds::MPII{ByAnnotation}, idx)
     annot = ds.annots[idx]
     otherannots = [ds.annots[i] for i in ds.imagetoannot[annot.image] if i != idx]
