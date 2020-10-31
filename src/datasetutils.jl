@@ -33,3 +33,13 @@ function LearnBase.getobs(data::CatData, idx)
         end
     end
 end
+
+
+zipdata(datas...) = ZipData(datas)
+struct ZipData
+    datas::Tuple
+end
+LearnBase.nobs(data::ZipData) = minimum(nobs.(data.datas))
+function LearnBase.getobs(data::ZipData, idx)
+    Tuple(getobs(d, idx) for d in data.datas)
+end

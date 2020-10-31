@@ -129,7 +129,9 @@ end
 end
 
 LearnBase.nobs(ds::MPII{<:ByImage}) = length(ds.images)
-function LearnBase.getobs(ds::MPII{ByImage}, idx)
+LearnBase.getobs(ds::MPII, idxs::AbstractVector) = [getobs(ds, idx) for idx in idxs]
+
+function LearnBase.getobs(ds::MPII{ByImage}, idx::Int)
     annots = [ds.annots[i] for i in ds.imagetoannot[ds.images[idx]]]
     poses = [parsepose(ann.joints) for ann in annots]
 
@@ -167,6 +169,24 @@ DLDatasets.metadata(::Type{MPII}) = (
         (14, 15),
         (13, 12),
         (2, 1)
+    ],
+    names = [
+        "r ankle",
+        "r knee",
+        "r hip",
+        "l hip",
+        "l knee",
+        "l ankle",
+        "pelvis",
+        "thorax",
+        "upper neck",
+        "head top",
+        "r wrist",
+        "r elbow",
+        "r shoulder",
+        "l shoulder",
+        "l elbow",
+        "l wrist",
     ]
 )
 
