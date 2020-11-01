@@ -31,9 +31,9 @@ using .MPIIData
 
 export
     # Dataset transformations
-    splitdata,
-    zipdata,
     catdata,
+    mapdata,
+    splitdata,
 
     # File dataset
     FileDataset,
@@ -53,6 +53,7 @@ export
     ImageNette,
     ImageWoof,
     MPII,
+    COCOKeypoints,
 
     # reexport
     getobs,

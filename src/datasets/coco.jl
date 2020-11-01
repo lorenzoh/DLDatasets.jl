@@ -12,6 +12,8 @@ using StructArrays
 
 using ..DLDatasets
 
+export COCOKeypoints
+
 const COCO_COPYRIGHT = """
 Terms of Use
 Annotations & Website
@@ -57,9 +59,9 @@ function __init__()
         DATASET_REGISTRY,
         COCOKeypoints,
         "byimage",
-        (splits) -> COCOKeypoints(
+        (splits; imagefolder = datadep"coco_keypoint_images") -> COCOKeypoints(
             ByImage,
-            datadep"coco_keypoint_images",
+            imagefolder,
             load(joinpath(datadep"coco_keypoint_annotations", "annotations.jld2"))["annotations"])
     )
 
@@ -67,9 +69,9 @@ function __init__()
         DATASET_REGISTRY,
         COCOKeypoints,
         "byannotation",
-        (splits) -> COCOKeypoints(
+        (splits; imagefolder = datadep"coco_keypoint_images") -> COCOKeypoints(
             ByAnnotation,
-            datadep"coco_keypoint_images",
+            imagefolder,
             load(joinpath(datadep"coco_keypoint_annotations", "annotations.jld2"))["annotations"])
     )
 end
@@ -90,6 +92,8 @@ struct COCOKeypoints{By}
     # Maps annotations ids to index in `annotations`
     id2idxmap
 end
+
+Base.show(io::IO, ds::COCOKeypoints) = print(io, "COCOKeypoints() with $(nobs(ds)) observations")
 
 DLDatasets.metadata(::Type{COCOKeypoints}) = (
     splits = (),

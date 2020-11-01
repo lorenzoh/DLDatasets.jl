@@ -1,4 +1,9 @@
 
+# # Data container utilities
+#
+# - [`catdata`](#)
+# - [`splitdata`](#)
+
 function loadobs(fs::Tuple, obs)
     return Tuple(f(obs) for f in fs)
 end
@@ -16,6 +21,31 @@ end
 splitdata(splitfn, dataset, splits::Nothing) = dataset
 
 
+
+struct MappedData
+    f
+    data
+end
+
+Base.show(io::IO, data::MappedData) = print(io, "mapdata($(data.f), $(data.data))")
+
+LearnBase.nobs(data::MappedData) = nobs(data.data)
+LearnBase.getobs(data::MappedData, idx::Int) = data.f(getobs(data.data, idx))
+LearnBase.getobs(data::MappedData, idxs::AbstractVector) = data.f.(getobs(data.data, idxs))
+
+"""
+    mapdata(f, data)
+
+Lazily maps function `f` over container `data`.
+"""
+const mapdata = MappedData
+
+
+"""
+    catdata(datas...)
+
+Concatenates data containers in the order they are passed.
+"""
 catdata(datas...) = CatData(datas)
 
 struct CatData
@@ -32,14 +62,4 @@ function LearnBase.getobs(data::CatData, idx)
             idx -= n
         end
     end
-end
-
-
-zipdata(datas...) = ZipData(datas)
-struct ZipData
-    datas::Tuple
-end
-LearnBase.nobs(data::ZipData) = minimum(nobs.(data.datas))
-function LearnBase.getobs(data::ZipData, idx)
-    Tuple(getobs(d, idx) for d in data.datas)
 end
