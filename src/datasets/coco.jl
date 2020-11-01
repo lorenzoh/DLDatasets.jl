@@ -38,7 +38,7 @@ function __init__()
         COCO_COPYRIGHT,
         "http://images.cocodataset.org/annotations/annotations_trainval2017.zip",
         "113a836d90195ee1f884e704da6304dfaaecff1f023f49b6ca93c4aaae470268",
-        post_fetch_method = path -> (unpack(path); init_coco_annotations(path))
+        post_fetch_method = path -> (unpack(path); init_coco_annotations(dirname(path)))
     ))
 
     register(DataDep(
@@ -49,8 +49,8 @@ function __init__()
             "http://images.cocodataset.org/zips/val2017.zip",
         ],
         [
-            "",
-            "",
+            "69a8bb58ea5f8f99d24875f21416de2e9ded3178e903f1f7603e283b9e06d929",
+            "4f7e2ccb2866ec5041993c9cf2a952bbed69647b115d0f74da7ce8f4bef82f05",
         ],
         post_fetch_method = unpack
     ))
@@ -132,13 +132,13 @@ function COCOKeypoints(
         annotations;
         filterfn = (_) -> true,
         minkeypoints = 1)
-    ids = filter(
+    use_annotations = filter(
         annot -> filterfn(annot) && annot.num_keypoints >= minkeypoints,
-        annotations).id
-    imagemap = makeimagemap(annotations.id, annotations.image_id)
+        annotations)
+    imagemap = makeimagemap(use_annotations.id, use_annotations.image_id)
     image_ids = collect(keys(imagemap))
     id2idxmap = Dict(id => idx for (idx, id) in enumerate(annotations.id))
-    return COCOKeypoints{by}(imagefolder, annotations, ids, image_ids, imagemap, id2idxmap)
+    return COCOKeypoints{by}(imagefolder, annotations, use_annotations.id, image_ids, imagemap, id2idxmap)
 end
 
 
