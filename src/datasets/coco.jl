@@ -59,20 +59,28 @@ function __init__()
         DATASET_REGISTRY,
         COCOKeypoints,
         "byimage",
-        (splits; imagefolder = datadep"coco_keypoint_images") -> COCOKeypoints(
-            ByImage,
-            imagefolder,
-            load(joinpath(datadep"coco_keypoint_annotations", "annotations.jld2"))["annotations"])
+        function loadcocoannot(split; imagefolder = datadep"coco_keypoint_images")
+            return splitdata(
+            COCOKeypoints(
+                ByImage,
+                imagefolder,
+                load(joinpath(datadep"coco_keypoint_annotations", "annotations.jld2"))["annotations"]),
+            split)
+        end
     )
 
     register!(
         DATASET_REGISTRY,
         COCOKeypoints,
         "byannotation",
-        (splits; imagefolder = datadep"coco_keypoint_images") -> COCOKeypoints(
-            ByAnnotation,
-            imagefolder,
-            load(joinpath(datadep"coco_keypoint_annotations", "annotations.jld2"))["annotations"])
+        function loadcocoimage(split; imagefolder = datadep"coco_keypoint_images")
+            splitdata(
+            COCOKeypoints(
+                ByAnnotation,
+                imagefolder,
+                load(joinpath(datadep"coco_keypoint_annotations", "annotations.jld2"))["annotations"]),
+            split)
+        end
     )
 end
 
@@ -92,6 +100,21 @@ struct COCOKeypoints{By}
     # Maps annotations ids to index in `annotations`
     id2idxmap
 end
+
+
+function DLDatasets.splitdata(ds::COCOKeypoints{B}, split::String) where B
+    if split == "valid"
+        annotations = ds.annotations[ds.annotations.isvalid]
+    elseif split == "train"
+        annotations = ds.annotations[(~).(ds.annotations.isvalid)]
+    else
+        error("Invalid split: $split")
+    end
+    return COCOKeypoints(B, ds.imagefolder, annotations)
+end
+
+DLDatasets.splitdata(ds::COCOKeypoints, split::Nothing) = ds
+
 
 Base.show(io::IO, ds::COCOKeypoints) = print(io, "COCOKeypoints() with $(nobs(ds)) observations")
 

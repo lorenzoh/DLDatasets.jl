@@ -18,6 +18,10 @@ function splitdata(splitfn, dataset, splits::Tuple)
     return Tuple(splitdata(splitfn, dataset, split) for split in splits)
 end
 
+function splitdata(dataset, splits::Tuple)
+    return Tuple(splitdata(dataset, split) for split in splits)
+end
+
 splitdata(splitfn, dataset, splits::Nothing) = dataset
 
 
