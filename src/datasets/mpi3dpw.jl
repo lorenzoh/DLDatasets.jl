@@ -14,22 +14,34 @@ using StaticArrays
 
 using ..DLDatasets
 
+
+function loadmpi3dpw(splits; imagefolder = nothing, sequencefolder = nothing)
+    if isnothing(imagefolder) || isnothing(sequencefolder)
+        error("""
+        Please pass `imagefolder` and `sequencefolder`. Due to license reasons
+        you have to download the dataset manually.
+
+        1. Go to https://virtualhumans.mpi-inf.mpg.de/3DPW/license.html
+        2. Read the license agreement
+        3. Download `sequenceFiles.zip` and `imageFiles.zip`
+        4. Unzip both archives
+
+        `imagefolder` and `sequencefolder` should then point to the extracted folders.
+        """)
+    end
+
+    return MPI3DPW(sequencefolder, imagefolder)
+end
+
+
 function __init__()
 
-    # TODO: add DataDeps including copyright notice
-
-    # TODO: register dataset
-    #=
     register!(
         DATASET_REGISTRY,
         MPI3DPW,
-        "byannotation",
-        (splits; imagefolder = datadep"coco_keypoint_images") -> COCOKeypoints(
-            ByImage,
-            imagefolder,
-            load(joinpath(datadep"coco_keypoint_annotations", "annotations.jld2"))["annotations"])
+        "v1",
+        loadmpi3dpw,
     )
-    =#
 
 end
 
