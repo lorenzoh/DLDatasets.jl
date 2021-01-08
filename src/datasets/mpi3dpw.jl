@@ -2,7 +2,6 @@ module MPI3DPWData
 
 using Glob
 using CoordinateTransformations
-using PoseEstimation
 using Images
 using LearnBase
 using LearnBase: getobs, nobs
@@ -124,7 +123,8 @@ nactors(sequence) = length(sequence["poses"])
 nsamples(sequence) = nactors(sequence) * nframes(sequence)
 
 
-LearnBase.nobs(ds::MPI3DPW) = sum(nsamples(seq) for seq in ds.sequences)
+LearnBase.nobs(ds::MPI3DPW) =
+    length(ds.sequences) > 1 ? sum(nsamples(seq) for seq in ds.sequences, init = 0) : 0
 
 
 function LearnBase.getobs(ds::MPI3DPW, idx::Int)
