@@ -27,6 +27,8 @@ include("datasets/coco.jl")
 using .COCOData
 include("datasets/mpii.jl")
 using .MPIIData
+include("datasets/mpi3dpw.jl")
+using .MPI3DPWData
 
 
 export
