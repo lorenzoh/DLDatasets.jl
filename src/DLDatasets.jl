@@ -29,6 +29,8 @@ include("datasets/mpii.jl")
 using .MPIIData
 include("datasets/mpi3dpw.jl")
 using .MPI3DPWData
+include("datasets/pets.jl")
+using .PetsData
 
 
 export
