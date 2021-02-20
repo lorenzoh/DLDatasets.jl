@@ -72,7 +72,7 @@ function __init__()
         "images",
         (splits) -> loadmpii(
             ByImage,
-            datadep"mpii_images",
+            joinpath(datadep"mpii_images", "images"),
             datadep"mpii_annotations",
             splits)
     )
@@ -83,7 +83,7 @@ function __init__()
         "annotations",
         (splits) -> loadmpii(
             ByAnnotation,
-            datadep"mpii_images",
+            joinpath(datadep"mpii_images", "images"),
             datadep"mpii_annotations",
             splits)
     )
