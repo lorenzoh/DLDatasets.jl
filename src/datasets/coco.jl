@@ -156,7 +156,7 @@ function COCOKeypoints(
         filterfn = (_) -> true,
         minkeypoints = 1)
     use_annotations = filter(
-        annot -> filterfn(annot) && annot.num_keypoints >= minkeypoints,
+        annot -> filterfn(annot),# && annot.num_keypoints >= minkeypoints,
         annotations)
     imagemap = makeimagemap(use_annotations.id, use_annotations.image_id)
     image_ids = collect(keys(imagemap))
