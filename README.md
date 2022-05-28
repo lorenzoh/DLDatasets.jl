@@ -1,5 +1,7 @@
 # DLDatasets.jl
 
+**This package is archived. Please use [MLDatasets.jl](https://github.com/JuliaML/MLDatasets.jl) and [FastAI.jl](https://github.com/FluxML/FastAI.jl) instead.**
+
 Quickly load datasets for deep learning.
 
 DLDatasets.jl provides a convenient way to download and load large deep learning datasets that do not fit into memory. It also provides building blocks for building your own datasets, for example `FileDataset`.
